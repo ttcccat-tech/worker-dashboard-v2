@@ -117,10 +117,13 @@ app.delete('/api/tasks/:id', (req, res) => {
 });
 
 // Serve static files from client build
-app.use(express.static(path.join(__dirname, 'client', 'build')));
+const buildPath = path.join(__dirname, 'client', 'build');
+console.log('Static files path:', buildPath);
+
+app.use(express.static(buildPath));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+  res.sendFile(path.join(buildPath, 'index.html'));
 });
 
 app.listen(PORT, () => {
