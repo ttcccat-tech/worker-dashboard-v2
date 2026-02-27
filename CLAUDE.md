@@ -10,7 +10,7 @@
 
 | Key | 顯示名稱 | 說明 | 自動 Tag |
 |-----|----------|------|----------|
-| daily | 交辦事項 | 持續性任務（需持續執行的查詢/任務） | cc |
+| daily | 交辦事項 | 持續性任務（需持續執行的查詢/任務） | 不自動設定，由老闆決定 |
 | backlog | 需求 | 待處理的開發任務 | cc |
 | inprogress | 開發 | 正在開發中的任務 | Cat |
 | testing | 測試 | 待 code review 的任務 | cc |
@@ -36,10 +36,11 @@
 ## 自動化邏輯
 
 ```
-daily/backlog → cc
+backlog → cc
 inprogress/deploy → Cat
 testing → cc
 done → 老闆
+daily → 不自動設定，由老闆決定
 ```
 
 ## API 端點

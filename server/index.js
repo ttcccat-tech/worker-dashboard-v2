@@ -90,12 +90,12 @@ app.put('/api/tasks/:id/move', (req, res) => {
     }
     
     // Auto-tag logic (根據欄位自動設定 tag):
-    // - daily (交辦事項) → cc
     // - backlog (需求) → cc
     // - inprogress (開發) → Cat
     // - testing (測試) → cc
     // - deploy (佈署) → Cat
     // - done (交付) → 老闆
+    // - daily (交辦事項) → 不自動設定，由老闆決定
     let tag = req.body.tag;
     if (status === 'inprogress' || status === 'deploy') {
       tag = 'Cat';
@@ -103,9 +103,10 @@ app.put('/api/tasks/:id/move', (req, res) => {
       tag = 'cc';
     } else if (status === 'done') {
       tag = '老闆';
-    } else if (status === 'daily' || status === 'backlog') {
+    } else if (status === 'backlog') {
       tag = 'cc';
     }
+    // daily 不自動設定 tag
     
     const stmt = db.prepare(`
       UPDATE tasks 
