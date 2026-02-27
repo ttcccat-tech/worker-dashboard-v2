@@ -67,6 +67,12 @@
 - 後端 port: 3004
 - 前端 build 後靜態托管
 - SQLite 資料庫檔案: database.sqlite
+- **狀態**: ✅ 已開發完成並部署
+- **運行中**: http://localhost:3004
+
+## Git 操作記錄
+- 初始化 commit: `docs: init project with SPEC.md and CLAUDE.md`
+- 功能 commit: `feat: init backend + frontend with 6-column Kanban board`
 
 ---
 

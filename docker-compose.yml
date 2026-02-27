@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  worker-dashboard-v2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: worker-dashboard-v2
+    ports:
+      - "3004:3004"
+    volumes:
+      - ./database.sqlite:/app/database.sqlite
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3004
+
+networks:
+  default:
+    name: openclaw-network
