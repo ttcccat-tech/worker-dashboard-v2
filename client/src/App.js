@@ -13,7 +13,9 @@ const STATUSES = [
 
 const TAGS = {
   Cat: { color: '#10b981', bg: '#064e3b' },
-  SRE: { color: '#3b82f6', bg: '#1e3a5f' }
+  SRE: { color: '#3b82f6', bg: '#1e3a5f' },
+  cc: { color: '#f59e0b', bg: '#78350f' },
+  老闆: { color: '#ec4899', bg: '#831843' }
 };
 
 function App() {
@@ -175,6 +177,8 @@ function App() {
               >
                 <option value="Cat">Cat</option>
                 <option value="SRE">SRE</option>
+                <option value="cc">cc</option>
+                <option value="老闆">老闆</option>
               </select>
               <div style={styles.modalActions}>
                 <button type="button" style={styles.cancelBtn} onClick={() => setShowModal(false)}>取消</button>
@@ -220,6 +224,8 @@ function App() {
               >
                 <option value="Cat">Cat</option>
                 <option value="SRE">SRE</option>
+                <option value="cc">cc</option>
+                <option value="老闆">老闆</option>
               </select>
               <div style={styles.modalActions}>
                 <button type="button" style={styles.cancelBtn} onClick={() => setEditingTask(null)}>取消</button>

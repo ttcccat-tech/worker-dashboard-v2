@@ -29,6 +29,9 @@ db.exec(`
 // Status columns
 const STATUSES = ['daily', 'backlog', 'inprogress', 'testing', 'deploy', 'done'];
 
+// Tags
+const TAGS = ['Cat', 'SRE', 'cc', '老闆'];
+
 // API Routes
 
 // GET all tasks
@@ -86,10 +89,17 @@ app.put('/api/tasks/:id/move', (req, res) => {
       return res.status(400).json({ error: 'Invalid status' });
     }
     
-    // Auto-tag logic: set to Cat when moving to inprogress
+    // Auto-tag logic:
+    // - 移到 inprogress → 自動設為 Cat（開始開發）
+    // - 移到 testing → 自動設為 cc（要給 cc code review）
+    // - 移到 done → 自動設為 老闆（要給老闆驗收）
     let tag = req.body.tag;
     if (status === 'inprogress' && !tag) {
       tag = 'Cat';
+    } else if (status === 'testing' && !tag) {
+      tag = 'cc';
+    } else if (status === 'done' && !tag) {
+      tag = '老闆';
     }
     
     const stmt = db.prepare(`
