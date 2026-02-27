@@ -117,7 +117,7 @@ app.delete('/api/tasks/:id', (req, res) => {
 });
 
 // Serve static files from client build
-const buildPath = path.join(__dirname, 'client', 'build');
+const buildPath = path.join(__dirname, '..', 'client', 'build');
 console.log('Static files path:', buildPath);
 
 app.use(express.static(buildPath));
