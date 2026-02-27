@@ -8,71 +8,54 @@
 
 ## 狀態欄位（6 欄位 Kanban）
 
-| Key | 顯示名稱 | 說明 |
-|-----|----------|------|
-| daily | 交辦事項 | 持續性任務（如 Nightly Self-Improvement） |
-| backlog | 需求 | 待處理的開發任務 |
-| inprogress | 開發 | 正在開發中的任務 |
-| testing | 測試 | 待 code review 的任務 |
-| deploy | 部署 | 待部署的任務 |
-| done | 交付 | 給老闆驗收用 |
+| Key | 顯示名稱 | 說明 | 自動 Tag |
+|-----|----------|------|----------|
+| daily | 交辦事項 | 持續性任務（需持續執行的查詢/任務） | cc |
+| backlog | 需求 | 待處理的開發任務 | cc |
+| inprogress | 開發 | 正在開發中的任務 | Cat |
+| testing | 測試 | 待 code review 的任務 | cc |
+| deploy | 佈署 | 待部署的任務 | Cat |
+| done | 交付 | 給老闆驗收用 | 老闆 |
 
 ## Tag 標籤系統
 
-- **SRE**: 系統維運任務
-- **Cat**: 開發任務
-- **可擴充**: 未來可增加其他 tag
+| Tag | 說明 | 誰處理 |
+|-----|------|--------|
+| Cat | 開發任務 | Cat 負責處理 |
+| cc | 需求/測試/交辦事項 | cc 負責處理 |
+| 老闆 | 交付驗收 | 老闆負責處理 |
+| SRE | 系統維運任務 | **所有人都要執行** |
 
-## 功能需求
+## 工作規則
 
-### 後端 API (Node.js + Express + SQLite)
-1. **任務 CRUD**
-   - GET /api/tasks - 取得所有任務
-   - POST /api/tasks - 建立新任務
-   - PUT /api/tasks/:id - 更新任務
-   - DELETE /api/tasks/:id - 刪除任務
-   - PUT /api/tasks/:id/move - 移動任務欄位
+1. **移動牌卡時自動更新 tag** - 移到哪個欄位，tag 就變成對應的人
+2. **根據 tag 指派** - 誰的 tag 誰處理
+3. **欄位不是必要條件** - repo 是共用的，其他人可以偕同開發
+4. **SRE 標籤** - 所有人都要執行該張牌卡
 
-2. **資料模型**
-   ```sql
-   CREATE TABLE tasks (
-     id INTEGER PRIMARY KEY AUTOINCREMENT,
-     title TEXT NOT NULL,
-     description TEXT,
-     status TEXT NOT NULL DEFAULT 'backlog',
-     tag TEXT DEFAULT 'Cat',
-     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-   );
-   ```
+## 自動化邏輯
 
-### 前端 (React)
-1. 6 欄位 Kanban 介面
-2. 顯示任務數量
-3. 顯示 tag 標籤（不同顏色）
-4. 拖曳或點擊移動任務
-5. 新增/編輯/刪除任務
+```
+daily/backlog → cc
+inprogress/deploy → Cat
+testing → cc
+done → 老闆
+```
 
-### Tag 自動化
-- 移動到「inprogress」自動設為「Cat」
-- 移動到「done」自動設為「Cat」（完成）
+## API 端點
 
-## 開發流程（Git 操作）
-
-1. 每個功能開發完成後 `git add .` + `git commit -m "feat: 描述"`
-2. 開發完成後 `git push origin main`
-3. Commit message 格式：`feat:`, `fix:`, `refactor:`, `docs:`
+| Method | Endpoint | 說明 |
+|--------|----------|------|
+| GET | /api/tasks | 取得所有任務 |
+| POST | /api/tasks | 建立新任務 |
+| PUT | /api/tasks/:id | 更新任務 |
+| PUT | /api/tasks/:id/move | 移動任務欄位（同時自動更新 tag） |
+| DELETE | /api/tasks/:id | 刪除任務 |
 
 ## 部署
-- 後端 port: 3004
-- 前端 build 後靜態托管
-- SQLite 資料庫檔案: database.sqlite
-- **狀態**: ✅ 已開發完成並部署
-- **運行中**: http://localhost:3004
 
-## Git 操作記錄
-- 初始化 commit: `docs: init project with SPEC.md and CLAUDE.md`
-- 功能 commit: `feat: init backend + frontend with 6-column Kanban board`
+- 後端 port: 3004
+- URL: http://192.168.1.206:3004
 
 ---
 

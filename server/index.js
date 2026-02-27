@@ -89,17 +89,22 @@ app.put('/api/tasks/:id/move', (req, res) => {
       return res.status(400).json({ error: 'Invalid status' });
     }
     
-    // Auto-tag logic:
-    // - 移到 inprogress → 自動設為 Cat（開始開發）
-    // - 移到 testing → 自動設為 cc（要給 cc code review）
-    // - 移到 done → 自動設為 老闆（要給老闆驗收）
+    // Auto-tag logic (根據欄位自動設定 tag):
+    // - daily (交辦事項) → cc
+    // - backlog (需求) → cc
+    // - inprogress (開發) → Cat
+    // - testing (測試) → cc
+    // - deploy (佈署) → Cat
+    // - done (交付) → 老闆
     let tag = req.body.tag;
-    if (status === 'inprogress' && !tag) {
+    if (status === 'inprogress' || status === 'deploy') {
       tag = 'Cat';
-    } else if (status === 'testing' && !tag) {
+    } else if (status === 'testing') {
       tag = 'cc';
-    } else if (status === 'done' && !tag) {
+    } else if (status === 'done') {
       tag = '老闆';
+    } else if (status === 'daily' || status === 'backlog') {
+      tag = 'cc';
     }
     
     const stmt = db.prepare(`
